@@ -11,6 +11,13 @@ import android.widget.Toast;
 import com.sts.sqlitedemo.db.DbManager;
 import com.sts.sqlitedemo.db.MySqliteHelper;
 
+/**
+ * SQLite数据库高级操作
+ *
+ * @author SuTongsheng
+ * @create 2019/10/29
+ * @Describe
+ */
 public class MainActivity extends AppCompatActivity {
     private MySqliteHelper helper;
 
@@ -85,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.bt_delete_api:
                 db = helper.getWritableDatabase();
-                int count2 = db.delete("person",  "_id=?", new String[]{"8"});
+                int count2 = db.delete("person", "_id=?", new String[]{"8"});
                 if (count2 > 0) {
                     Toast.makeText(MainActivity.this, "删除数据成功", Toast.LENGTH_SHORT).show();
                 } else {

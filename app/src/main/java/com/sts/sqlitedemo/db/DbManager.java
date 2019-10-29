@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.sts.sqlitedemo.Constant;
 import com.sts.sqlitedemo.bean.Person;
@@ -18,6 +19,7 @@ import java.util.List;
  */
 public class DbManager {
     private static MySqliteHelper helper;
+    private static final String TAG = "DbManager";
 
     public static MySqliteHelper getInstance(Context context) {
         if (helper == null) {
@@ -70,4 +72,40 @@ public class DbManager {
         }
         return personList;
     }
+
+    /**
+     * 查询数据库中的数据个数
+     *
+     * @param db
+     * @param tableName
+     * @return
+     */
+    public static int getDataCount(SQLiteDatabase db, String tableName) {
+        int count = 0;
+        if (db != null) {
+            Cursor cursor = db.rawQuery("select * from " + tableName, null);
+            count = cursor.getCount();
+        }
+        Log.e(TAG, "quaryRawQuary: " + count);
+        return count;
+    }
+
+    /**
+     * 根据当前页码获取当前页数据
+     *
+     * @param db
+     * @param tableName
+     * @param currentPage
+     * @return
+     */
+    public static List<Person> getListByCurrentPage(SQLiteDatabase db, String tableName, int currentPage, int pageSize) {
+        Cursor cursor = null;
+        int index = (currentPage - 1) * pageSize;
+        if (db != null) {
+            String sql = "select * from " + tableName + " limit ?,?";
+            cursor = db.rawQuery(sql, new String[]{index + "", pageSize + ""});
+        }
+        return DbManager.cursorToList(cursor);
+    }
+
 }
